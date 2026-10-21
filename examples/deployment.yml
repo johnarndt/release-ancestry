@@ -1,0 +1,37 @@
+# Copy into your app's .github/workflows/ directory and customize.
+# This example is not an active workflow in the Release Ancestry repository.
+name: Deployment with ancestry preflight
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Install the checker
+        run: npm install --global github:johnarndt/release-ancestry#v0.1.0
+      - name: Refresh the required release ref
+        run: git fetch origin main
+      - name: Check the candidate against production
+        run: >-
+          release-ancestry check
+          --required-ref origin/main
+          --health-url https://app.example.com/api/health
+          --json
+      # Add build/deploy steps for the same checked commit.
+      # Keep the preflight immediately before deployment if builds are lengthy.
+      # This concurrency group serializes only participating workflows in this
+      # repository. Coordinate local deployments and other repositories too.

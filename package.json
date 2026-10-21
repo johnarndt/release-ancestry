@@ -1,0 +1,25 @@
+{
+  "name": "@johnarndt/release-ancestry",
+  "version": "0.1.0",
+  "description": "Verify that a candidate Git commit contains the releases already running in production.",
+  "type": "module",
+  "bin": {
+    "release-ancestry": "bin/release-ancestry.js"
+  },
+  "exports": "./src/check.js",
+  "files": ["bin/", "src/", "examples/", "README.md", "LICENSE"],
+  "engines": {"node": ">=22"},
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check bin/release-ancestry.js && node --check src/check.js && node --check src/cli.js",
+    "demo": "node scripts/demo.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnarndt/release-ancestry.git"
+  },
+  "bugs": {"url": "https://github.com/johnarndt/release-ancestry/issues"},
+  "homepage": "https://github.com/johnarndt/release-ancestry#readme",
+  "keywords": ["git", "deployment", "release", "ci", "ancestry"],
+  "license": "MIT"
+}
